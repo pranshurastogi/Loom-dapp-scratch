@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 7000 || process.env.PORT;
+const port = 3003 || process.env.PORT;
 const bodyParser = require('body-parser');
 
 const { readFileSync } = require('fs')
@@ -61,120 +61,65 @@ app.get('/set_value', async (req, res) => {
   res.send(sv)
 });
 
-app.get('/total_supply', async (req, res) => {
-  console.log("**** GET /totalSupply ****");
+app.post('/registerOwner', async(req, res) => {
+  console.log("**** Post/resgisterOwner ****");
+
+  let shared_document_information = req.body.shared_document_information;
+  let owner_address = req.body.owner_address;
+ 
+  shared_document_information.toString();
+
+  console.log({"PARAMS":req.body});
+
   try {
-  var v = await connection.totalSupply()
-  console.log(v)
-  } catch (e) {
-    console.log(e)
-  }
-    res.send(v)
-});
-
-app.get('/CurrentuserAddress', async (req, res) => {
-  console.log("**** GET /Current user address ****");
-  try {
-  var v = await connection._createCurrentUserAddress()
-  console.log(v)
-  } catch (e) {
-    console.log(e)
-  }
-    res.send(v)
-});
-
-
-app.get('/name', async (req, res) => {
-  console.log("**** GET /name ****");
-  try {
-  var v = await connection.name()
-  console.log(v)
-  // res.send(v)
-  } catch (e) {
-    console.log(e)
-  }
-  res.send(v)
-});
-
-
-app.get('/symbol', async (req, res) => {
-  console.log("**** GET /symbol ****");
-  try {
-  var v = await connection.symbol()
-  console.log(v)
-  // res.send(v)
-  } catch (e) {
-    console.log(e)
-  }
-  res.send(v)
-
-});
-
-
-// app.get('/balanceOf', async (req, res) => {
-//   console.log("**** GET /balanceOf ****");
-//   try {
-//   var v = await connection.balanceOf()
-//   console.log(v)
-//   // res.send(v)
-//   } catch (e) {
-//     console.log(e)
-//   }
-//   res.send(v)
-// });
-
-
-app.get('/balanceOf', async (req, res) => {
-  console.log("**** GET /Balance OF****");
-  try {
-	var sv = await connection.balanceOf('0x5f0B0A62F91DC5829b1b54D280013f792D208A4a')
-	console.log(sv)
-  } catch (e) {
-	console.log(e)
-  }
-  res.send(sv.toString())
-});
-
-app.get('/keys', (req, res) => {
-  console.log("**** GET /Keys****");
-  try {
-	var sv =  connection.Keys()
-	console.log(sv)
-  } catch (e) {
-	console.log(e)
-  }
-  res.send(sv)
-});
-
-
-app.post('/transfer', (req, res) => {
-  console.log("**** Post/Transfer****");
-  console.log(req.body);
-
-  let Givaddress = req.body.address;
-  let Givamount = req.body.amount;
-  try {
-    var sv =  connection.fetchTransfer(Givaddress,Givamount)
-    console.log(sv)
+    await connection.registerOwner(shared_document_information,owner_address).then(data =>{
+      console.log({"DATA":data});
+      console.log(typeof(data))
+      if (data != '')
+      res.send({'Success':1,'Transaction_Details':data});
+      else{
+        res.send({'Success':0,'Message':'ERR'});
+      }
+    }).catch(err => {
+      res.status(500).send({
+      message: err.message || 'Some error occurred.'
+    });
+    })
     } catch (e) {
     console.log("Error",e)
     }
-  res.send(sv)
+  
 });
 
 
-// app.post('/transfer', (req, res) => {
-//   console.log("**** Post/Transfer****");
-//   console.log(req.body);
+app.post('/getUIDOwner', async(req, res) => {
+  console.log("**** Post/getSharedDocumentOwner ****");
 
-//   let Givaddress = req.body.address;
-//   let Givamount = req.body.amount;
-//   console.log("Provided address and amount",Givaddress,Givamount);
-//   connection.fetchTransfer(Givaddress,Givamount,(answer)=> {
-//     console.log('Transfer ====>', answer  )
-//     res.send(answer);
-//   });
-// });
+  let shared_document_information = req.body.shared_document_information;
+
+  shared_document_information.toString();
+
+  console.log({"PARAMS":req.body});
+
+  try {
+    await connection.getUidOwner(shared_document_information).then(data =>{
+      console.log({"DATA":data});
+      console.log(typeof(data))
+      if (data != '')
+      res.send({'Success':1,'Owner':data});
+      else{
+        res.send({'Success':0,'Message':'ERR'});
+      }
+    }).catch(err => {
+      res.status(500).send({
+      message: err.message || 'Some error occurred.'
+    });
+    })
+    } catch (e) {
+    console.log("Error",e)
+    }
+  
+});
 
 app.listen(port, () => {
   console.log("Loom Express Listening at http://localhost:" + port);
