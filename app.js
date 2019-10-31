@@ -62,6 +62,8 @@ app.get('/get_value', async (req, res) => {
   res.send(v)
 });
 
+
+
 app.post('/set_value', async (req, res) => {
   
   let int_value = req.body.int_value;
@@ -152,6 +154,27 @@ app.post('/getUIDOwner', async(req, res) => {
     }
   
 });
+
+app.get('/generateLoomAddress',async(req,res) => {
+  try {
+  var privateKey = CryptoUtils.generatePrivateKey()
+  var publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey)
+  var address = LocalAddress.fromPublicKey(publicKey).toString()
+
+  var arrayPrivateKey = Buffer.from(privateKey, 'hex')
+
+
+  res.json({
+    'address':address,
+    'PrivateKey':arrayPrivateKey,
+    'PublicKey':publicKey
+  })
+
+  }
+  catch (err){
+    res.json({'Msg':'Failure','Error':err})
+  }
+})
 
 app.listen(port, () => {
   console.log("Loom Express Listening at http://localhost:" + port);

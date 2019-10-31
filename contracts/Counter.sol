@@ -32,6 +32,7 @@ contract Counter {
     
 
     function registerOwner(string uid,address owner) public {
+      // require(msg.sender == owner)
         ownerMapping[uid] = owner;
     }
     
