@@ -65,7 +65,7 @@ module.exports = {
 
     this.web3 = new Web3(new LoomProvider(this.client, privateKey))    
     const ABI = SimpleStore.abi
-    
+
     this.simpleStoreInstance = new this.web3.eth.Contract(ABI, this.currentNetwork.address, {
       from: address
     })
@@ -81,9 +81,17 @@ module.exports = {
     })
   },
 
-  registerOwner: async function(uid,owner_address) {
-    return await this.simpleStoreInstance.methods.registerOwner(uid,owner_address).send({
-      from: this.currentUserAddress
+  registerOwner: async function(uid,address,privateKey) {
+    this.web3 = new Web3(new LoomProvider(this.client, privateKey))    
+    const ABI = SimpleStore.abi
+    
+    this.simpleStoreInstance = new this.web3.eth.Contract(ABI, this.currentNetwork.address, {
+      from: address
+    })
+
+
+    return await this.simpleStoreInstance.methods.registerOwner(uid,address).send({
+      from: address
     })
   },
 

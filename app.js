@@ -100,13 +100,18 @@ app.post('/registerOwner', async(req, res) => {
 
   let shared_document_information = req.body.shared_document_information;
   let owner_address = req.body.owner_address;
+
+  var privateKey = req.body.privateKey;
+  var a = Buffer.from(privateKey, 'hex')
+  var uint8 = new Uint8Array(a);
+
  
   shared_document_information.toString();
 
-  console.log({"PARAMS":req.body});
+  // console.log({"PARAMS":req.body});
 
   try {
-    await connection.registerOwner(shared_document_information,owner_address).then(data =>{
+    await connection.registerOwner(shared_document_information,owner_address,uint8).then(data =>{
       console.log({"DATA":data});
       console.log(typeof(data))
       if (data != '')
@@ -115,6 +120,7 @@ app.post('/registerOwner', async(req, res) => {
         res.send({'Success':0,'Message':'ERR'});
       }
     }).catch(err => {
+      console.log(err)
       res.status(500).send({
       message: err.message || 'Some error occurred.'
     });
@@ -162,7 +168,6 @@ app.get('/generateLoomAddress',async(req,res) => {
   var address = LocalAddress.fromPublicKey(publicKey).toString()
 
   var arrayPrivateKey = Buffer.from(privateKey, 'hex')
-
 
   res.json({
     'address':address,
