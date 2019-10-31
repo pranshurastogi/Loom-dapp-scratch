@@ -65,7 +65,7 @@ module.exports = {
     this.web3 = new Web3(new LoomProvider(this.client, privateKey))    
     const ABI = SimpleStore.abi
     this.simpleStoreInstance = new this.web3.eth.Contract(ABI, this.currentNetwork.address, {
-      from: this.currentUserAddress
+      from: address
     })
     return await this.simpleStoreInstance.methods.set(value).send({
       from: address
