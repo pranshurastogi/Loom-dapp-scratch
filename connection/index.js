@@ -67,10 +67,10 @@ module.exports = {
   },
   
 
-  setValue: async function(value) {
+  setValue: async function(value,address) {
     console.log('contract: ', value)
     return await this.simpleStoreInstance.methods.set(value).send({
-      from: this.currentUserAddress
+      from: address
     })
   },
 

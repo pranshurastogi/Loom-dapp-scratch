@@ -53,9 +53,10 @@ app.get('/get_value', async (req, res) => {
 app.post('/set_value', async (req, res) => {
   
   let int_value = req.body.int_value;
-  console.log("**** GET /setValue ****");
+  let address = req.body.address;
+  console.log("**** SET /setValue ****");
   try {
-	var sv = await connection.setValue(int_value);
+	var sv = await connection.setValue(int_value,address);
 	console.log("Resultss",sv)
   } catch (e) {
 	console.log(e)
