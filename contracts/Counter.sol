@@ -2,6 +2,8 @@ pragma solidity ^0.4.25;
 
 contract Counter {
   uint counter;
+  uint storeddata;
+
 
   constructor() public {
     counter = 0; // Initialise the counter to 0
@@ -15,6 +17,15 @@ contract Counter {
     return counter;
   }
 
+
+
+  function set(uint x) public {
+  storeddata = x;
+  }
+
+  function get() public view returns(uint){
+  return storeddata;
+  }
 
  // Mapping UID with address 
     mapping(string => address) ownerMapping;

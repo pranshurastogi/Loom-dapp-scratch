@@ -69,16 +69,14 @@ module.exports = {
 
   setValue: async function(value) {
     console.log('contract: ', value)
-    // console.log('this.simpleStoreInstance: ', this.simpleStoreInstance.methods)
     return await this.simpleStoreInstance.methods.set(value).send({
       from: this.currentUserAddress
     })
-    // console.log('%%%%%%%%%%%%%', a)
   },
 
 
   getValue: async function() {
-    return await this.simpleStoreInstance.methods.getCounter().call({
+    return await this.simpleStoreInstance.methods.get().call({
       from: this.currentUserAddress
     })
   },
