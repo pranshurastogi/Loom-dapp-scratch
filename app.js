@@ -68,12 +68,19 @@ app.post('/set_value', async (req, res) => {
   console.log("**** SET /setValue ****");
   try {
 
-  var privateKey = CryptoUtils.generatePrivateKey()
-  var publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey)
-  var address = LocalAddress.fromPublicKey(publicKey).toString()
+  // var privateKey = CryptoUtils.generatePrivateKey()
+  // var publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey)
+  // var address = LocalAddress.fromPublicKey(publicKey).toString()
+
+var privateKey = req.body.privateKey;
+var address = req.body.address;
+var a = Buffer.from(privateKey, 'hex')
+var uint8 = new Uint8Array(a);
 
 
-	var sv = await connection.setValue(int_value,address,privateKey);
+
+
+	var sv = await connection.setValue(int_value,address,uint8);
 	console.log("Resultss",sv)
   } catch (e) {
 	console.log(e)
@@ -81,9 +88,9 @@ app.post('/set_value', async (req, res) => {
   res.json({
     'Result':sv,
     'PrivateKey':privateKey,
-    'PublicKey':publicKey,
-    'Address':address
-  })
+    'Address':address,
+    'a':uint8
+      })
 });
 
 app.post('/registerOwner', async(req, res) => {

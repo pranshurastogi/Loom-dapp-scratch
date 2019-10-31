@@ -15,5 +15,8 @@
     "dotenv": "^8.1.0",
     "loom-truffle-provider": "^0.13.0",
     "truffle-hdwallet-provider": "^1.0.17"
+  },
+  "dependencies": {
+    "string-to-arraybuffer": "^1.0.2"
   }
 }
