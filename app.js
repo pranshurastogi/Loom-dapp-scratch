@@ -8,6 +8,18 @@ const LoomTruffleProvider = require('loom-truffle-provider')
 const path = require('path')
 const { join } = require('path')
 
+
+
+
+const Loom = require('loom-js')
+const Client = Loom.Client
+const LocalAddress = Loom.LocalAddress
+const CryptoUtils = Loom.CryptoUtils
+const LoomProvider = Loom.LoomProvider
+
+
+
+
 const Web3 = require('web3')
 const connection = require('./connection')
 
@@ -53,15 +65,25 @@ app.get('/get_value', async (req, res) => {
 app.post('/set_value', async (req, res) => {
   
   let int_value = req.body.int_value;
-  let address = req.body.address;
   console.log("**** SET /setValue ****");
   try {
-	var sv = await connection.setValue(int_value,address);
+
+  var privateKey = CryptoUtils.generatePrivateKey()
+  var publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey)
+  var address = LocalAddress.fromPublicKey(publicKey).toString()
+
+
+	var sv = await connection.setValue(int_value,address,privateKey);
 	console.log("Resultss",sv)
   } catch (e) {
 	console.log(e)
   }
-  res.send(sv)
+  res.json({
+    'Result':sv,
+    'PrivateKey':privateKey,
+    'PublicKey':publicKey,
+    'Address':address
+  })
 });
 
 app.post('/registerOwner', async(req, res) => {
